@@ -19,6 +19,9 @@ bool IsInCheck(const GameState& state, Color color);
 // Determine if the side to move has no legal moves and is in check
 bool IsCheckmate(const GameState& state, Color color);
 
+// Determine if the side to move has no legal moves but is not in check
+bool IsStalemate(const GameState& state, Color color);
+
 } // namespace Chess
 
 #endif // GAMELOGIC_H

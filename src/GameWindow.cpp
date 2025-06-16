@@ -2,6 +2,7 @@
 #include <QWidget>
 #include <QMessageBox>
 #include <QProcess>
+#include "StockfishAI.h"
 
 namespace Chess {
 
@@ -75,6 +76,10 @@ void GameWindow::HandleSquare(int idx){
         Move m{selected_,idx};
         if(auto next=ApplyMove(state_,m)){
             state_=*next;
+            if(IsStalemate(state_, state_.toMove)){
+                QMessageBox::information(this,"Game Over","Stalemate");
+                timer_->stop();
+            }
         }
         selected_=-1;
         ClearHighlights();
@@ -91,16 +96,16 @@ void GameWindow::UpdateTimers(){
 }
 
 void GameWindow::MakeAIMove(){
-    // Example stockfish integration using QProcess; not fully implemented
-    QProcess sf;
-    sf.start("stockfish");
-    if(!sf.waitForStarted(1000)) return;
-    sf.write("uci\n");
-    sf.waitForReadyRead(1000);
-    sf.write("ucinewgame\n");
-    sf.write("isready\n");
-    sf.waitForReadyRead(1000);
-    // FEN not implemented; placeholder
+    if(auto move = QueryStockfish(state_)){
+        if(auto next = ApplyMove(state_, *move)){
+            state_ = *next;
+            RenderBoard();
+            if(IsStalemate(state_, state_.toMove)){
+                QMessageBox::information(this, "Game Over", "Stalemate");
+                timer_->stop();
+            }
+        }
+    }
 }
 
 } // namespace Chess
