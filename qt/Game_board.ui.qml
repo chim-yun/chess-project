@@ -12,6 +12,25 @@ Item {
     id: root
     width: 1920
     height: 1080
+    property int whiteTime: 600
+    property int blackTime: 600
+
+    Timer {
+        id: turnTimer
+        interval: 1000
+        running: true
+        repeat: true
+        onTriggered: {
+            if (game.sideToMove === "White")
+                whiteTime--
+            else
+                blackTime--
+            if (whiteTime <= 0 || blackTime <= 0) {
+                turnTimer.stop()
+                game.timeOut()
+            }
+        }
+    }
 
     BorderImage {
         id: borderImage
@@ -320,6 +339,28 @@ Item {
                 fillMode: Image.PreserveAspectFit
             }
 
+        }
+    }
+
+    Column {
+        id: timerDisplay
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 20
+        spacing: 4
+        Text { text: "White: " + whiteTime }
+        Text { text: "Black: " + blackTime }
+    }
+
+    Button {
+        id: resignButton
+        text: qsTr("Resign")
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        anchors.margins: 20
+        onClicked: {
+            turnTimer.stop()
+            game.resign()
         }
     }
 }
