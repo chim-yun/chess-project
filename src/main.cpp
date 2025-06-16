@@ -1,7 +1,9 @@
 #include <QApplication>
 #include <QInputDialog>
 #include <QMessageBox>
-#include "GameWindow.h"
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include "GameAdapter.h"
 #include "UserSystem.h"
 
 using namespace Chess;
@@ -24,7 +26,12 @@ int main(int argc, char** argv){
     if(QMessageBox::question(nullptr,"Start","Start game?")==QMessageBox::No)
         return 0;
 
-    GameWindow w;
-    w.show();
+    GameAdapter adapter;
+    QQmlApplicationEngine engine;
+    engine.rootContext()->setContextProperty("game", &adapter);
+    engine.load(QUrl::fromLocalFile("qml/ChessGame.qml"));
+    if(engine.rootObjects().isEmpty())
+        return -1;
+
     return app.exec();
 }
