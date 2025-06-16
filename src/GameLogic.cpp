@@ -390,4 +390,25 @@ bool IsCheckmate(const GameState& state, Color color) {
     return true;
 }
 
+bool IsStalemate(const GameState& state, Color color) {
+    if (IsInCheck(state, color))
+        return false;
+    for (int from = 0; from < 64; ++from) {
+        if (state.board[from].color != color) continue;
+        for (int to = 0; to < 64; ++to) {
+            Move m{from, to};
+            if (ApplyMove(state, m)) return false;
+            if (state.board[from].type == PieceType::Pawn &&
+                ((color == Color::White && to / 8 == 7) ||
+                 (color == Color::Black && to / 8 == 0))) {
+                for (PieceType pt : {PieceType::Queen, PieceType::Rook, PieceType::Bishop, PieceType::Knight}) {
+                    Move pm{from, to, pt};
+                    if (ApplyMove(state, pm)) return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
 } // namespace Chess
