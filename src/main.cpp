@@ -1,26 +1,30 @@
-#include "GameLogic.h"
+#include <QApplication>
+#include <QInputDialog>
+#include <QMessageBox>
+#include "GameWindow.h"
 #include "UserSystem.h"
-#include <iostream>
 
 using namespace Chess;
 
-int main() {
-    UserDatabase db = EmptyDatabase();
-    db = RegisterUser(db, "user1", "pass");
+int main(int argc, char** argv){
+    QApplication app(argc, argv);
 
-    if (LoginUser(db, "user1", "pass"))
-        std::cout << "Login successful\n";
-    else
-        std::cout << "Login failed\n";
-
-    GameState state = MakeInitialState();
-    // Example: move white pawn from e2 to e4 (index 12 -> 28)
-    Move m{12, 28};
-    auto next = ApplyMove(state, m);
-    if (next) {
-        std::cout << "Move applied\n";
-        std::cout << "White in check? " << (IsInCheck(*next, Color::White) ? "yes" : "no") << "\n";
-        std::cout << "Black in checkmate? " << (IsCheckmate(*next, Color::Black) ? "yes" : "no") << "\n";
+    UserDatabase db = LoadDatabase("users.txt");
+    bool ok = false;
+    QString user = QInputDialog::getText(nullptr,"Login","Username:",QLineEdit::Normal,"",&ok);
+    if(!ok) return 0;
+    QString pass = QInputDialog::getText(nullptr,"Login","Password:",QLineEdit::Password,"",&ok);
+    if(!ok) return 0;
+    if(!LoginUser(db,user.toStdString(),pass.toStdString())){
+        QMessageBox::information(nullptr,"Register","Registering new user.");
+        db = RegisterUser(db,user.toStdString(),pass.toStdString());
+        SaveDatabase(db,"users.txt");
     }
-    return 0;
+
+    if(QMessageBox::question(nullptr,"Start","Start game?")==QMessageBox::No)
+        return 0;
+
+    GameWindow w;
+    w.show();
+    return app.exec();
 }
