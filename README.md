@@ -10,9 +10,12 @@ This repository contains a skeleton implementation of a functional-style C++ che
 
 ## Building
 
-1. Install Qt6 (Qt Quick, Widgets, Qml modules).
+1. Install Qt6 (Qt Quick, Widgets, Qml modules). Version 6.4 or newer works.
+   On Ubuntu you can install the development packages via `apt install qt6-base-dev qt6-declarative-dev`.
+   On Windows download Qt and ensure the CMake files are available.
 2. Configure the project with CMake. If CMake cannot find Qt automatically,
-   specify the installation path via `CMAKE_PREFIX_PATH`:
+   specify the installation path via `CMAKE_PREFIX_PATH` (or set `Qt6_DIR`).
+   This resolves errors such as `Unknown CMake command "qt_add_library"`:
    ```bash
    cmake -S . -B build \
      -DCMAKE_PREFIX_PATH="C:/Qt/6.8.3/mingw_64"
