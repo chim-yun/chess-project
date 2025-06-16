@@ -29,7 +29,8 @@ int main(int argc, char** argv){
     GameAdapter adapter;
     QQmlApplicationEngine engine;
     engine.rootContext()->setContextProperty("game", &adapter);
-    engine.load(QUrl::fromLocalFile("qml/ChessGame.qml"));
+    // Load the QML interface from the application resources
+    engine.load(QUrl(QStringLiteral("qrc:/qml/ChessGame.qml")));
     if(engine.rootObjects().isEmpty())
         return -1;
 
