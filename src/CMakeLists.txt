@@ -18,6 +18,7 @@ qt_add_executable(chess_program
     ${PROJECT_SOURCES}
 )
 
+
 # Bundle QML files into the executable using Qt's resource system
 qt_add_resources(chess_program qml_resources
     PREFIX "/"
@@ -26,6 +27,8 @@ qt_add_resources(chess_program qml_resources
         ${CMAKE_SOURCE_DIR}/qt/Game_board.ui.qml
         ${CMAKE_SOURCE_DIR}/qt/Screen01.ui.qml
 )
+
+=======
 
 # Link against required Qt libraries
 target_link_libraries(chess_program
