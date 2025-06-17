@@ -15,12 +15,29 @@ qt_add_executable(chess_program
 )
 
 # Bundle QML resources so the UI loads from the binary
+# QML resources packaged with the executable
+set(QML_FILES
+    ../qml/ChessGame.qml
+    ../qt/Game_board.ui.qml
+    ../qt/Screen01.ui.qml
+)
+
+# Make sure the resource names are relative so the files are accessible via
+# qrc:/qml/... and qrc:/qt/...
+set_source_files_properties(
+    ../qml/ChessGame.qml PROPERTIES QT_RESOURCE_ALIAS qml/ChessGame.qml
+)
+set_source_files_properties(
+    ../qt/Game_board.ui.qml PROPERTIES QT_RESOURCE_ALIAS qt/Game_board.ui.qml
+)
+set_source_files_properties(
+    ../qt/Screen01.ui.qml PROPERTIES QT_RESOURCE_ALIAS qt/Screen01.ui.qml
+)
+
 qt_add_resources(chess_program qml_resources
     PREFIX "/"
     FILES
-        ${CMAKE_SOURCE_DIR}/qml/ChessGame.qml
-        ${CMAKE_SOURCE_DIR}/qt/Game_board.ui.qml
-        ${CMAKE_SOURCE_DIR}/qt/Screen01.ui.qml
+        ${QML_FILES}
 )
 
 # Link against Qt libraries
