@@ -17,6 +17,7 @@ qt_add_executable(chess_program
 # Bundle QML resources so the UI loads from the binary
 # QML resources packaged with the executable
 set(QML_FILES
+
     ../qml/ChessGame.qml
     ../qt/Game_board.ui.qml
     ../qt/Screen01.ui.qml
@@ -32,6 +33,11 @@ set_source_files_properties(
 )
 set_source_files_properties(
     ../qt/Screen01.ui.qml PROPERTIES QT_RESOURCE_ALIAS qt/Screen01.ui.qml
+=======
+    ${CMAKE_SOURCE_DIR}/qml/ChessGame.qml
+    ${CMAKE_SOURCE_DIR}/qt/Game_board.ui.qml
+    ${CMAKE_SOURCE_DIR}/qt/Screen01.ui.qml
+
 )
 
 qt_add_resources(chess_program qml_resources
